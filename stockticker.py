@@ -271,3 +271,4 @@ def update_graph(n, btn_next):
 # main function for the dashboard
 if __name__ == '__main__':
     app.run_server(debug=True)
+    # app.server.run(port=8000, host='xxx.xxx.x.xxx')
