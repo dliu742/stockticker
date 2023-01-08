@@ -11,3 +11,5 @@ This could be changed according to the ip address if required.
 
 Result, scrolling stock ticker website:
 ![stock ticker](img/screenshot.png)
+
+The tickers could be modified via the ticker.csv file.
