@@ -43,7 +43,7 @@ text_group = html.Div(
                     html.H1(children='Jan-07, 2023',
                             id='date',
                             style={'color': 'white',
-                                   'fontSize': 80,
+                                   'fontSize': 70,
                                    'text-align': 'center',
                                    'padding': 0,
                                    'margin': 0})
@@ -52,7 +52,7 @@ text_group = html.Div(
                     html.H1(children='10:55AM',
                             id='current_time',
                             style={'color': 'white',
-                                   'fontSize': 80,
+                                   'fontSize': 70,
                                    'text-align': 'center',
                                    'padding': 0,
                                    'margin': 0})
@@ -62,37 +62,28 @@ text_group = html.Div(
         dbc.Row(
             [
                 dbc.Col(
-                    html.P(children='Ticker: ',
-                          id='ticker_text',
-                          style={'color': 'white',
-                                 'fontSize': 40,
-                                 'text-align': 'center',
-                                 'padding': 0}),
-                    width=2
-                ),
-                dbc.Col(
-                    html.P(children='AMD',
-                           id='ticker_name',
+                    html.P(children='Ticker Name ',
+                           id='ticker_text',
                            style={'color': 'white',
-                                  'fontSize': 40,
-                                  'text-align': 'left',
+                                  'fontSize': 32,
+                                  'text-align': 'center',
                                   'padding': 0}),
-                    width=2
+                    width=6
                 ),
                 dbc.Col(
                     html.P(children='$63.96',
                            id='ticker_price',
                            style={'color': 'white',
-                                  'fontSize': 40,
+                                  'fontSize': 35,
                                   'text-align': 'center',
                                   'padding': 0}),
-                    width=3
+                    width=2
                 ),
                 dbc.Col(
                     html.P(children='$1.63 (2.35%)',
                            id='ticker_price_change',
                            style={'color': 'white',
-                                  'fontSize': 40,
+                                  'fontSize': 35,
                                   'text-align': 'center',
                                   'margin': 0}),
                     width=3
@@ -140,7 +131,6 @@ button_group = html.Div(
                         labelClassName="btn btn-outline-secondary",
                         labelCheckedClassName="active",
                         options=[
-                            # {"label": "All Stocks", "value": 0},
                             {"label": "Index", "value": 1},
                             {"label": "Tech", "value": 2},
                             {"label": "Financials", "value": 3},
@@ -151,7 +141,7 @@ button_group = html.Div(
                             {"label": "China", "value": 8},
                             {"label": "International", "value": 9},
                         ],
-                        value=[2],
+                        value=[1],
                     ), width=8
                 ),
                 dbc.Col(
@@ -210,52 +200,46 @@ def update_global_var(checklist):
     global china
     global international
 
+    # select tickers based on user checkbox input, add it to the ticker_list array
     ticker_list = []
-    # if the crypto is selected, update selected ticker list to be crypto only and reset current ticker count
-    if 0 in checklist:
-        print('All Stocks')
-        current_ticker = 0
-        selected_ticker = all_tickers
-        return ['All Stocks selected']
-    # if the crypto is not selected, update selected ticker list to stocks and crypto and reset current ticker count
-    else:
-        current_ticker = 0
-        if 1 in checklist:
-            ticker_list = ticker_list + indices
-            print('Indices selected')
-        if 2 in checklist:
-            ticker_list = ticker_list + tech
-            print('Tech selected')
-        if 3 in checklist:
-            ticker_list = ticker_list + financials
-            print('Financials selected')
-        if 4 in checklist:
-            ticker_list = ticker_list + industrial
-            print('Industrial selected')
-        if 5 in checklist:
-            ticker_list = ticker_list + travel
-            print('Travel selected')
-        if 6 in checklist:
-            ticker_list = ticker_list + consumers
-            print('Consumers selected')
-        if 7 in checklist:
-            ticker_list = ticker_list + crypto
-            print('Crypto selected')
-        if 8 in checklist:
-            ticker_list = ticker_list + china
-            print('China selected')
-        if 9 in checklist:
-            ticker_list = ticker_list + international
-            print('International selected')
-        selected_ticker = ticker_list
-        return ['customized tickers selected']
+    current_ticker = 0
+    if 1 in checklist:
+        ticker_list = ticker_list + indices
+        print('Indices selected')
+    if 2 in checklist:
+        ticker_list = ticker_list + tech
+        print('Tech selected')
+    if 3 in checklist:
+        ticker_list = ticker_list + financials
+        print('Financials selected')
+    if 4 in checklist:
+        ticker_list = ticker_list + industrial
+        print('Industrial selected')
+    if 5 in checklist:
+        ticker_list = ticker_list + travel
+        print('Travel selected')
+    if 6 in checklist:
+        ticker_list = ticker_list + consumers
+        print('Consumers selected')
+    if 7 in checklist:
+        ticker_list = ticker_list + crypto
+        print('Crypto selected')
+    if 8 in checklist:
+        ticker_list = ticker_list + china
+        print('China selected')
+    if 9 in checklist:
+        ticker_list = ticker_list + international
+        print('International selected')
+    selected_ticker = ticker_list
+    return ['customized tickers selected']
 
 
 # Multiple components can update everytime interval gets fired.
 @app.callback([Output('graph', 'figure'),
                Output('date', 'children'),
                Output('current_time', 'children'),
-               Output('ticker_name', 'children'),
+               Output('ticker_text', 'children'),
+               Output('ticker_text', 'style'),
                Output('ticker_price', 'children'),
                Output('ticker_price_change', 'children'),
                Output('ticker_price_change', 'style')],
@@ -284,7 +268,23 @@ def update_graph(n, btn_next, btn_previous):
         if current_ticker > (len(selected_ticker) - 1):
             current_ticker = 0
 
-    # obtain yahoo finance historic data
+    # Depending on the ticket name length, resize the text
+    ticker_short_name = str(yf.Ticker(symbol).info['shortName']).removesuffix(', Inc.').removesuffix('index').\
+        removesuffix('average').removesuffix('Inc.').removesuffix('Company').removesuffix('& Co.').removesuffix(', plc.').\
+        removesuffix('Corporation').removesuffix('Corp.')
+    ticker_name = '{} ({})'.format('Ticker: ', symbol)
+    print(ticker_name)
+    if len(ticker_name) >= 35:
+        # set font size
+        ticker_name_font_size = 28
+    else:
+        # normal font size
+        ticker_name_font_size = 32
+    ticker_size_style = {'color': 'white',
+                         'fontSize': ticker_name_font_size,
+                         'margin': 0,
+                         'text-align': 'center'}
+    # obtain yahoo finance historic data and ticker text name
     price_history = yf.Ticker(symbol).history(
         period='1d',  # valid periods: 1d,5d,1mo,3mo,6mo,1y,2y,5y,10y,ytd,max
         interval='1m', # valid intervals: 1m,2m,5m,15m,30m,60m,90m,1h,1d,5d,1wk,1mo,3mo
@@ -333,10 +333,11 @@ def update_graph(n, btn_next, btn_previous):
     ticker_current_price = '${}'.format(round(closing_price, 2))
     ticker_price_change = '${} ({}%)'.format(round(price_change, 2), round(percentage_change, 2))
     ticker_price_change_style = {'color': color_logic,
-                                 'fontSize': 40,
+                                 'fontSize': 35,
                                  'margin': 0,
                                  'text-align': 'center'}
-    return fig, date, time, symbol, ticker_current_price, ticker_price_change, ticker_price_change_style
+    return fig, date, time, ticker_name, ticker_size_style,\
+           ticker_current_price, ticker_price_change, ticker_price_change_style
 
 
 # main function for the dashboard
