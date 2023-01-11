@@ -221,31 +221,31 @@ def update_global_var(checklist):
     else:
         current_ticker = 0
         if 1 in checklist:
-            #ticker_list.append(indices)
+            ticker_list = ticker_list + indices
             print('Indices selected')
         if 2 in checklist:
-            ticker_list.append(tech)
+            ticker_list = ticker_list + tech
             print('Tech selected')
         if 3 in checklist:
-            ticker_list.append(financials)
+            ticker_list = ticker_list + financials
             print('Financials selected')
         if 4 in checklist:
-            ticker_list.append(industrial)
+            ticker_list = ticker_list + industrial
             print('Industrial selected')
         if 5 in checklist:
-            ticker_list.append(travel)
+            ticker_list = ticker_list + travel
             print('Travel selected')
         if 6 in checklist:
-            ticker_list.append(consumers)
+            ticker_list = ticker_list + consumers
             print('Consumers selected')
         if 7 in checklist:
-            ticker_list.append(crypto)
+            ticker_list = ticker_list + crypto
             print('Crypto selected')
         if 8 in checklist:
-            ticker_list.append(china)
+            ticker_list = ticker_list + china
             print('China selected')
         if 9 in checklist:
-            ticker_list.append(international)
+            ticker_list = ticker_list + international
             print('International selected')
         selected_ticker = ticker_list
         return ['customized tickers selected']
