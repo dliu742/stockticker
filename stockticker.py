@@ -130,6 +130,7 @@ button_group = html.Div(
                         inputClassName="btn-check",
                         labelClassName="btn btn-outline-secondary",
                         labelCheckedClassName="active",
+                        persistence=True,
                         options=[
                             {"label": "Index", "value": 1},
                             {"label": "Tech", "value": 2},
@@ -203,6 +204,8 @@ def update_global_var(checklist):
     # select tickers based on user checkbox input, add it to the ticker_list array
     ticker_list = []
     current_ticker = 0
+    if len(checklist) == 0:
+        ticker_list = indices
     if 1 in checklist:
         ticker_list = ticker_list + indices
         print('Indices selected')
@@ -269,9 +272,11 @@ def update_graph(n, btn_next, btn_previous):
             current_ticker = 0
 
     # Depending on the ticket name length, resize the text
-    ticker_short_name = str(yf.Ticker(symbol).info['shortName']).removesuffix(', Inc.').removesuffix('index').\
-        removesuffix('average').removesuffix('Inc.').removesuffix('Company').removesuffix('& Co.').removesuffix(', plc.').\
-        removesuffix('Corporation').removesuffix('Corp.')
+    # yf.Ticker.info does not provide the name of the stock anymore maybe futher update will fix this... meanwhile remove
+    # ticker_short_name = str(yf.Ticker(symbol).info['shortName'])
+    #ticker_short_name = ticker_short_name.removesuffix(', Inc.').removesuffix('index').\
+    #    removesuffix('average').removesuffix('Inc.').removesuffix('Company').removesuffix('& Co.').removesuffix(', plc.').\
+    #    removesuffix('Corporation').removesuffix('Corp.')
     ticker_name = '{} ({})'.format('Ticker: ', symbol)
     print(ticker_name)
     if len(ticker_name) >= 35:
