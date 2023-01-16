@@ -17,7 +17,7 @@ Best way to run this application:
 If the user operates the dashboard from a development or debug mode, the dashboard can be access via the following address: 127.0.0.0:8050.
 
 Result, scrolling stock ticker website:
-![stock ticker](img/screenshot.png)
+![stock ticker](img/dashboard.png)
 
 Customization:
 1) Tickers could be modified via the ticker.csv file
